@@ -1,0 +1,62 @@
+.hints {
+    li {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 0.3rem 0;
+
+        mat-icon {
+            margin-right: 0.5rem;
+        }
+    }
+}
+
+.list {
+    width: 60rem;
+    margin: 0 auto;
+
+    mat-list-item {
+        height: auto;
+    }
+}
+
+.list-item-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        &.n {
+            width: 2rem;
+        }
+
+        &.tpsup{
+            mat-icon{
+                font-size: 1.2rem;
+                margin-top: 0.6rem;
+            }
+        }
+
+        &.name {
+            width: 22rem;
+        }
+
+        &.draw {
+            width: 5rem;
+            margin-left: 4rem;
+
+            input {
+                width: 2rem;
+                margin-right: 0.5rem;
+            }
+        }
+
+        &.remove {
+            margin-left: auto;
+        }
+    }
+}

@@ -1,0 +1,70 @@
+.table {
+    width: 50rem;
+    margin: 2rem auto 0;
+    border-collapse: collapse;
+
+    th {
+        padding: 0.5rem 0.25rem;
+    }
+
+    tr.header-bottom,
+    th.header-exam {
+        border-bottom: 1px solid #666;
+    }
+
+    tr.odd {
+        background-color: #eeeeee;
+    }
+
+    tr.item:hover {
+        background-color: #dddddd;
+    }
+
+    tr.pause {
+        background-color: #C1E1C1;
+
+        .title {
+            text-align: center;
+        }
+    }
+
+    .border-right {
+        border-right: 1px solid #666;
+    }
+
+    .border-left {
+        border-left: 1px solid #666;
+    }
+
+    td {
+        padding: 0.33rem;
+
+        &.schedule {
+            text-align: center;
+            white-space: nowrap;
+            &.empty{
+                background-color: #ccc;
+            }
+        }
+
+        &.time-difference {
+            text-align: center;
+        }
+
+        &.tpsup,
+        &.draw {
+            width: 2rem;
+            text-align: center;
+
+            mat-icon {
+                vertical-align: middle;
+                font-size: 1rem;
+                margin-top: 0.5rem
+            }
+        }
+
+        &.pause-title {
+            text-align: center;
+        }
+    }
+}

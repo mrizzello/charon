@@ -1,0 +1,55 @@
+.spacer {
+    flex: 1 1 auto;
+}
+
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.refresh-container{
+    padding: 1rem 0;
+}
+
+.main {
+    width: 95%; 
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.card-tab-group {
+    padding: 1rem;
+    margin-bottom: 12rem;
+}
+
+.classe {
+    font-weight: bold;
+    text-align: center;
+    padding: 0.33rem 0;
+}
+
+.item-list {
+    .list-item {
+        padding: 0.33rem;
+        display: flex;
+        justify-content: left;
+        align-items: center;
+
+        .n {
+            width: 2rem;
+        }
+
+        .tpsup {
+            margin-right: 1rem;
+
+            .icon {
+                margin-left: 0.5rem;
+            }
+        }
+
+        .actions {
+            margin-left: auto;
+        }
+    }
+}

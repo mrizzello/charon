@@ -1,0 +1,40 @@
+<div>
+    <ul class="hints">
+        <li><mat-icon fontSet="material-icons-outlined">timer</mat-icon> Indiquer les élèves aux bénéfice de temps
+            supplémentaire.</li>
+        <li><mat-icon>tag</mat-icon> Si un tirage a déjà été effectué, remplir l'ordre de passage.</li>
+        <li><mat-icon>shuffle</mat-icon> Possibilité d'effectuer un tirage aléatoire.</li>
+    </ul>
+</div>
+<div class="button-row">
+    <button mat-raised-button color="accent" (click)="randomDraw()">
+        <mat-icon>shuffle</mat-icon>Tirage aléatoire
+    </button>
+</div>
+<mat-list role="list" class="list">
+    <ng-container *ngFor="let item of items.items">
+        <mat-list-item role="listitem">
+            <div class="list-item-container">
+                <div class="item n">
+                    {{item.n}}.
+                </div>
+                <div class="item name">
+                    {{item.firstname}} {{item.lastname}}
+                </div>
+                <div class="item tpsup">
+                    <mat-checkbox class="example-margin" [checked]="item.tpsup" (change)="updateTpsup($event, item)">
+                        <mat-icon fontSet="material-icons-outlined">timer</mat-icon>
+                    </mat-checkbox>
+                </div>
+                <div class="item draw">
+                    <input type="text" name="draw" [value]="item.draw" (change)="updateDraw($event, item)">
+                    <mat-icon>tag</mat-icon>
+                </div>
+                <div class="item remove">
+                    <button mat-button color="warn" (click)="removeItem(item.n)">supprimer</button>
+                </div>
+            </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+    </ng-container>
+</mat-list>
