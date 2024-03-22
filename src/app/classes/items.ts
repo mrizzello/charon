@@ -1,15 +1,6 @@
 import { Item } from "./item";
 import { Pause } from "./pause";
-
-export class Settings {
-    start: string = '08:20';
-    tprep: number = 10;
-    texam: number = 10;
-    tsupprep: number = 5;
-    tsupexam: number = 0;
-    tpauseShort: number = 10;
-    tpauseNoon: number = 60;
-};
+import { Settings } from "./settings";
 
 type ExamType = 'exam1' | 'exam2';
 
@@ -17,7 +8,6 @@ export class Items {
 
     classe: string = '';
     items: any[] = [];
-    start: string = '08:20';
     settings: Settings = new Settings();
     lastTime!: Date;
     pauseNoon!: Pause;
@@ -36,6 +26,15 @@ export class Items {
 
     getSettings(): Settings {
         return this.settings;
+    }
+
+    getSetting(property: keyof Settings): Date | number {
+        return this.settings[property];
+    }
+
+    setSetting(property: keyof Settings, value: any): void {
+        this.settings[property] = value;
+        this.updateSchedule();
     }
 
     removeItem(i: any) {
@@ -71,6 +70,10 @@ export class Items {
 
     process(): void {
         this.addDrawDummies();
+        this.updateSchedule();
+    }
+
+    updateSchedule(): void{
         this.calculateExamSchedules('exam1');
         this.calculateExamSchedules('exam2');
         this.sortBy('drawDummy1');
@@ -127,12 +130,7 @@ export class Items {
             this.sortBy('drawDummy2');
         }
 
-        const [hours, minutes] = this.settings.start.split(":");
-
-        let time = new Date();
-        time.setHours(parseInt(hours, 10));
-        time.setMinutes(parseInt(minutes, 10));
-        time.setSeconds(0);
+        let time = new Date(this.settings.start);
         if (useLastTime !== false) {
             time = new Date(this.lastTime);
         }
