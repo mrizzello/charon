@@ -62,7 +62,6 @@ export class AppComponent {
     if (i == 0) {
       this.items?.removePauses();
       this.items?.sortBy('n');
-      console.log(this.items);
     }
     if (i == 1) {
       this.examFormComponent.process();

@@ -37,21 +37,21 @@
                 <ng-container *ngIf="item.subtype == 'short'">
                     <td colspan="3" class="schedule">{{item.exam1.time1 | date:'HH:mm'}} -
                         {{item.exam1.time2 | date:'HH:mm'}}</td>
-                    <td colspan="2" class="pause-title">{{item.title}}</td>
+                    <td colspan="2" class="pause-title">&larr; {{item.title}} &rarr; </td>
                     <td colspan="3" class="schedule">{{item.exam2.time1 | date:'HH:mm'}} -
                         {{item.exam2.time2 | date:'HH:mm'}}</td>
                 </ng-container>
                 <ng-container *ngIf="item.subtype == 'noon'">
                     <td colspan="3" class="schedule">{{item.exam1.time1 | date:'HH:mm'}} -
                         {{item.exam1.time2 | date:'HH:mm'}}</td>
-                    <td colspan="2" class="pause-title border-right">{{item.title}}</td>
+                    <td colspan="2" class="pause-title border-right">&larr; {{item.title}}</td>
                     <td colspan="3" class="schedule empty">&nbsp;</td>
                 </ng-container>
             </ng-container>
         </tr>
         <tr *ngIf="pauseNoon" class="pause">
             <td colspan="3" class="schedule empty">&nbsp;</td>
-            <td colspan="2" class="pause-title border-left">{{pauseNoon.title}}</td>
+            <td colspan="2" class="pause-title border-left">{{pauseNoon.title}} &rarr;</td>
             <td colspan="3" class="schedule">{{pauseNoon.exam1.time1 | date:'HH:mm'}} -
                 {{pauseNoon.exam1.time2 | date:'HH:mm'}}</td>
         </tr>

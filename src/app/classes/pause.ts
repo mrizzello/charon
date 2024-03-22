@@ -1,6 +1,6 @@
 export interface PauseSchedule {
-    time1: Date | null;
-    time2: Date | null;
+    time1: Date;
+    time2: Date;
 }
 
 export class Pause {
@@ -33,12 +33,12 @@ export class Pause {
         this.drawDummy2 = drawDummy2;
         this.cssRowClass = cssRowClass;
         this.exam1 = {
-            time1: exam1?.time1 ?? null,
-            time2: exam1?.time2 ?? null
+            time1: exam1?.time1 ?? new Date(),
+            time2: exam1?.time2 ?? new Date()
         };
         this.exam2 = {
-            time1: exam2?.time1 ?? null,
-            time2: exam2?.time2 ?? null
+            time1: exam2?.time1 ?? new Date(),
+            time2: exam2?.time2 ?? new Date()
         };
     }
 }

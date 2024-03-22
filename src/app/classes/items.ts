@@ -76,8 +76,8 @@ export class Items {
         this.sortBy('drawDummy1');
     }
 
-    getPauseNoon(){
-        const orderNoon = Math.ceil(this.items.length / 2) - 1;        
+    getPauseNoon() {
+        const orderNoon = Math.ceil(this.items.length / 2) - 1;
         return this.items[orderNoon];
     }
 
@@ -90,10 +90,10 @@ export class Items {
         });
 
         let numbersArray = Array.from({ length: this.items.length }, (_, index) => index + 1);
-        let sliceIndex = numbersArray.indexOf(Math.ceil(numbersArray.length / 2)) + 1;
-        let firstPart = numbersArray.slice(sliceIndex);
-        let secondPart = numbersArray.slice(0, sliceIndex);
-        numbersArray = firstPart.concat(secondPart);
+        const midIndex = Math.floor(numbersArray.length / 2);
+        const first = numbersArray.splice(midIndex + 1);
+        const last = numbersArray.splice(numbersArray.length - 1);
+        numbersArray = first.concat(last).concat(numbersArray);
 
         this.items.forEach((item, index) => {
             item.drawDummy2 = numbersArray[index];
@@ -173,17 +173,9 @@ export class Items {
                 }
             }
         });
-
-        if (examType == 'exam2') {
-            const orderNoon = Math.ceil(this.items.length / 2) - 1;
-            this.items[0][examType].time1 = new Date(this.items[orderNoon][examType].time3);
-            this.items[0][examType].time2 = new Date(this.items[0][examType].time1);
-            this.items[0][examType].time2.setMinutes(this.items[0][examType].time2.getMinutes() + this.settings.tpauseNoon);
-        }
-
     }
 
-    removePauses(){
+    removePauses() {
         this.items.forEach((item, index) => {
             if (item.type == 'pause') {
                 this.items.splice(index, 1);
