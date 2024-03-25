@@ -1,8 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import * as XLSX from 'xlsx';
 
-import { ExamFormComponent } from './listes/exam-form/exam-form.component';
 import { Items } from './classes/items';
+import { ExamFormComponent } from './listes/exam-form/exam-form.component';
 
 @Component({
   selector: 'app-root',

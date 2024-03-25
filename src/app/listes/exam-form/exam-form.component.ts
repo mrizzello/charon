@@ -13,6 +13,8 @@ export class ExamFormComponent {
 
   lastTime!: Date;
   pauseNoon!: Pause;
+  exam1name: string = 'Examen 1';
+  exam2name: string = 'Examen 2';
 
   @Input() items!: Items;
 
@@ -39,6 +41,15 @@ export class ExamFormComponent {
       if( nextValue >= 0 ){
         this.items.setSetting(property, nextValue);
       }
+    }
+  }
+
+  onExamChange(name: string): void{
+    if( name == 'exa1' ){
+      this.items.setSetting('exam1name', this.exam1name);
+    }
+    if( name == 'exa2' ){
+      this.items.setSetting('exam2name', this.exam2name);
     }
   }
 

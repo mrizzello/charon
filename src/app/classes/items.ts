@@ -28,12 +28,12 @@ export class Items {
         return this.settings;
     }
 
-    getSetting(property: keyof Settings): Date | number {
-        return this.settings[property];
+    getSetting(property: keyof Settings): string | Date | number {
+        return this.settings.getProperty(property);
     }
 
     setSetting(property: keyof Settings, value: any): void {
-        this.settings[property] = value;
+        this.settings.setProperty(property, value);
         this.updateSchedule();
     }
 
@@ -73,7 +73,7 @@ export class Items {
         this.updateSchedule();
     }
 
-    updateSchedule(): void{
+    updateSchedule(): void {
         this.calculateExamSchedules('exam1');
         this.calculateExamSchedules('exam2');
         this.sortBy('drawDummy1');
@@ -161,14 +161,12 @@ export class Items {
                 this.lastTime = new Date(exam);
             }
             if (item.type == 'pause') {
-                if (this.items[index - 1] !== undefined) {
-                    let duration = item.subtype == 'noon' ? this.settings.tpauseNoon : this.settings.tpauseShort;
-                    item[examType].time1 = new Date(this.items[index - 1][examType].time3);
-                    item[examType].time2 = new Date(item[examType].time1);
-                    item[examType].time2.setMinutes(item[examType].time2.getMinutes() + duration);
-                    time = new Date(item[examType].time2);
-                    this.lastTime = new Date(item[examType].time2);
-                }
+                let duration = item.subtype == 'noon' ? this.settings.tpauseNoon : this.settings.tpauseShort;
+                item[examType].time1 = new Date(this.lastTime);
+                item[examType].time2 = new Date(item[examType].time1);
+                item[examType].time2.setMinutes(item[examType].time2.getMinutes() + duration);
+                time = new Date(item[examType].time2);
+                this.lastTime = new Date(item[examType].time2);
             }
         });
     }
@@ -186,14 +184,13 @@ export class Items {
         const length = this.items.length;
 
         const orderAm = Math.ceil(length / 4);
-        this.items.splice(orderAm, 0, new Pause({ title: 'Pause', subtype: 'short' }));
+        this.items.splice(orderAm, 0, new Pause({ title: 'Pause courte', subtype: 'short' }));
 
         const orderNoon = Math.ceil(length / 2) + 1;
         this.items.splice(orderNoon, 0, new Pause({ title: 'Pause repas', subtype: 'noon' }));
 
         const orderPm = Math.ceil(length / 4 * 3) + 2;
-        this.items.splice(orderPm, 0, new Pause({ title: 'Pause', subtype: 'short' }));
+        this.items.splice(orderPm, 0, new Pause({ title: 'Pause courte', subtype: 'short' }));
 
     }
-
 }

@@ -6,6 +6,8 @@ export class Settings {
     tsupexam: number = 0;
     tpauseShort: number = 10;
     tpauseNoon: number = 60;
+    exam1name: string = '';
+    exam2name: string = '';
 
     constructor(start: string = '08:20') {
         const [hours, minutes] = start.split(":");
@@ -13,4 +15,29 @@ export class Settings {
         this.start.setMinutes(parseInt(minutes, 10));
         this.start.setSeconds(0);
     }
+
+    setProperty(property: keyof Settings, value: string | number | Date): void {
+        switch (property) {
+            case 'start':
+                this.start = value as Date;
+                break;
+            case 'tprep':
+            case 'texam':
+            case 'tsupprep':
+            case 'tsupexam':
+            case 'tpauseShort':
+            case 'tpauseNoon':
+                this[property] = value as number;
+                break;
+            case 'exam1name':
+            case 'exam2name':
+                this[property] = value as string;
+                break;
+        }
+    }
+
+    getProperty(property: keyof Settings): any {
+        return this[property];
+    }
+
 };

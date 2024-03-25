@@ -1,45 +1,58 @@
 <div class="main">
     <div class="settings">
+        <h3>Modifications</h3>
+        <div class="text-container">
+            <mat-form-field>
+                <mat-label>Examen 1</mat-label>
+                <input matInput [(ngModel)]="exam1name" (input)="onExamChange('exa1')" placeholder="Discipline">
+            </mat-form-field>
+        </div>
+        <div class="text-container">
+            <mat-form-field>
+                <mat-label>Examen 2</mat-label>
+                <input matInput [(ngModel)]="exam2name" (input)="onExamChange('exa2')" placeholder="Discipline">
+            </mat-form-field>
+        </div>
         <div class="time-container">
-            <div class="start">Heure de début : {{items.getSetting('start') | date:'HH:mm'}}</div>
+            <div class="label tprep">Minutes préparation : {{items.getSetting('tprep')}} min.</div>
             <div class="button-row">
-                <button mat-button color="primary" (click)="setStart('sub', 5)">-5</button> | 
-                <button mat-button color="primary" (click)="setStart('add', 5)">+5</button>
+                <button mat-flat-button color="primary" (click)="setMinutes('tprep', -1)">-1</button>
+                <button mat-flat-button color="primary" (click)="setMinutes('tprep', 1)">+1</button>
             </div>
         </div>
         <div class="time-container">
-            <div class="tprep">Préparation : {{items.getSetting('tprep')}} min.</div>
+            <div class="label texam">Minutes examen : {{items.getSetting('texam')}} min.</div>
             <div class="button-row">
-                <button mat-button color="primary" (click)="setMinutes('tprep', -1)">-1</button> | 
-                <button mat-button color="primary" (click)="setMinutes('tprep', 1)">+1</button>
+                <button mat-flat-button color="primary" (click)="setMinutes('texam', -1)">-1</button>
+                <button mat-flat-button color="primary" (click)="setMinutes('texam', 1)">+1</button>
             </div>
         </div>
         <div class="time-container">
-            <div class="texam">Examen : {{items.getSetting('texam')}} min.</div>
+            <div class="label tsupprep">Minutes suppl. prépa. : {{items.getSetting('tsupprep')}} min.</div>
             <div class="button-row">
-                <button mat-button color="primary" (click)="setMinutes('texam', -1)">-1</button> | 
-                <button mat-button color="primary" (click)="setMinutes('texam', 1)">+1</button>
+                <button mat-flat-button color="primary" (click)="setMinutes('tsupprep', -1)">-1</button>
+                <button mat-flat-button color="primary" (click)="setMinutes('tsupprep', 1)">+1</button>
             </div>
         </div>
         <div class="time-container">
-            <div class="tsupprep">Temps suppl. prépa. : {{items.getSetting('tsupprep')}} min.</div>
+            <div class="label start">Heure de début : {{items.getSetting('start') | date:'HH:mm'}}</div>
             <div class="button-row">
-                <button mat-button color="primary" (click)="setMinutes('tsupprep', -1)">-1</button> | 
-                <button mat-button color="primary" (click)="setMinutes('tsupprep', 1)">+1</button>
+                <button mat-flat-button color="primary" (click)="setStart('sub', 5)">-5</button>
+                <button mat-flat-button color="primary" (click)="setStart('add', 5)">+5</button>
             </div>
         </div>
         <div class="time-container">
-            <div class="tpauseNoon">Minutes pause repas : {{items.getSetting('tpauseNoon')}} min.</div>
+            <div class="label tpauseNoon">Minutes pause repas : {{items.getSetting('tpauseNoon')}} min.</div>
             <div class="button-row">
-                <button mat-button color="primary" (click)="setMinutes('tpauseNoon', -5)">-5</button> | 
-                <button mat-button color="primary" (click)="setMinutes('tpauseNoon', 5)">+5</button>
+                <button mat-flat-button color="primary" (click)="setMinutes('tpauseNoon', -5)">-5</button>
+                <button mat-flat-button color="primary" (click)="setMinutes('tpauseNoon', 5)">+5</button>
             </div>
         </div>
         <div class="time-container">
-            <div class="tpauseShort">Minutes pause(s) : {{items.getSetting('tpauseShort')}} min.</div>
+            <div class="label tpauseShort">Minutes pauses courtes : {{items.getSetting('tpauseShort')}} min.</div>
             <div class="button-row">
-                <button mat-button color="primary" (click)="setMinutes('tpauseShort', -5)">-5</button> | 
-                <button mat-button color="primary" (click)="setMinutes('tpauseShort', 5)">+5</button>
+                <button mat-flat-button color="primary" (click)="setMinutes('tpauseShort', -5)">-5</button>
+                <button mat-flat-button color="primary" (click)="setMinutes('tpauseShort', 5)">+5</button>
             </div>
         </div>
     </div>
@@ -47,9 +60,9 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th colspan="3" class="header-exam">Examen 1</th>
+                    <th colspan="3" class="header-exam">{{exam1name}}</th>
                     <th colspan="2"></th>
-                    <th colspan="3" class="header-exam">Examen 2</th>
+                    <th colspan="3" class="header-exam">{{exam2name}}</th>
                 </tr>
                 <tr class="header-bottom">
                     <th>&nbsp;</th>
@@ -65,7 +78,7 @@
             <tbody>
                 <ng-container *ngFor="let item of items.items; let i = index">
                     <ng-container *ngIf="item.type == 'item'">
-                        <tr [ngClass]="i % 2 == 0 ? 'even' : 'odd'" class="item">
+                        <tr [ngClass]="item.drawDisplay1 % 2 == 0 ? 'even' : 'odd'" class="item">
                             <td>{{item.drawDisplay1}}</td>
                             <td class="schedule">{{ item.exam1.time1 | date:'HH:mm' }} - {{ item.exam1.time2 |
                                 date:'HH:mm'
@@ -88,7 +101,7 @@
                             <td>{{item.drawDisplay2}}</td>
                         </tr>
                     </ng-container>
-                    <ng-container *ngIf="item.type == 'pause'">
+                    <ng-container *ngIf="item.type == 'pause' && item.getTimeDifference() > 0">
                         <tr class="pause">
                             <ng-container *ngIf="item.subtype == 'short'">
                                 <td colspan="3" class="schedule">{{item.exam1.time1 | date:'HH:mm'}} -
@@ -106,11 +119,11 @@
                         </tr>
                     </ng-container>
                 </ng-container>
-                <tr *ngIf="pauseNoon" class="pause">
+                <tr *ngIf="pauseNoon && pauseNoon.getTimeDifference() > 0" class="pause">
                     <td colspan="3" class="schedule empty">&nbsp;</td>
                     <td colspan="2" class="pause-title border-left">{{pauseNoon.title}} &rarr;</td>
-                    <td colspan="3" class="schedule">{{pauseNoon.exam1.time1 | date:'HH:mm'}} -
-                        {{pauseNoon.exam1.time2 | date:'HH:mm'}}</td>
+                    <td colspan="3" class="schedule">{{pauseNoon.exam2.time1 | date:'HH:mm'}} -
+                        {{pauseNoon.exam2.time2 | date:'HH:mm'}}</td>
                 </tr>
             </tbody>
         </table>

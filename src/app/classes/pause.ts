@@ -41,4 +41,10 @@ export class Pause {
             time2: exam2?.time2 ?? new Date()
         };
     }
+
+    getTimeDifference(): number{
+        const diffInMilliseconds = Math.abs(this.exam1.time2.getTime() - this.exam1.time1.getTime());
+        const diffInMinutes = Math.floor(diffInMilliseconds / (1000 * 60));
+        return diffInMinutes;
+    }
 }

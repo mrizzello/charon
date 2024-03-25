@@ -10,20 +10,33 @@
     padding-right: 1rem;
     text-align: center;
 
+    h3{
+        font-weight: bold;
+    }
+
     .time-container {
         background-color: #E8EAF6;
         padding: 1rem;
         margin-bottom: 1rem;
+
+        .label{
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
 
         .button-row {
             display: flex;
             flex-direction: row;
             align-items: center;
             padding: 0;
-            .mat-mdc-button{
-                margin: 0 0.5rem;
+            button{
+                margin: 0 1rem;
             }
         }
+    }
+
+    mat-form-field{
+        width: 100%;
     }
 }
 
@@ -42,8 +55,10 @@
         padding: 0.5rem 0.25rem;
     }
 
-    tr.header-bottom,
     th.header-exam {
+        background-color: #eee;
+    }
+    tr.header-bottom{
         border-bottom: 1px solid #666;
     }
 
