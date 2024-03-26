@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 
 import { Items } from '../../classes/items';
-import { Pause } from "../../classes/pause";
 import { Settings } from "../../classes/settings";
 
 @Component({
@@ -11,16 +10,16 @@ import { Settings } from "../../classes/settings";
 })
 export class ExamFormComponent {
 
-  lastTime!: Date;
-  pauseNoon!: Pause;
   exam1name: string = 'Examen 1';
   exam2name: string = 'Examen 2';
+  schedule1: any[] = [];
+  schedule2: any[] = [];
 
   @Input() items!: Items;
 
-  process(): void {
-    this.items.process();
-    this.pauseNoon = this.items.getPauseNoon();
+  getSchedules(): void {
+    this.schedule1 = this.items.getSchedule(1);
+    this.schedule2 = this.items.getSchedule(2);
   }
 
   setStart(op: string, minutes: number) {
@@ -38,17 +37,17 @@ export class ExamFormComponent {
     let tmp = this.items.getSetting(property);
     if (typeof tmp === 'number') {
       const nextValue = tmp + minutes;
-      if( nextValue >= 0 ){
+      if (nextValue >= 0) {
         this.items.setSetting(property, nextValue);
       }
     }
   }
 
-  onExamChange(name: string): void{
-    if( name == 'exa1' ){
+  onExamChange(name: string): void {
+    if (name == 'exa1') {
       this.items.setSetting('exam1name', this.exam1name);
     }
-    if( name == 'exa2' ){
+    if (name == 'exa2') {
       this.items.setSetting('exam2name', this.exam2name);
     }
   }

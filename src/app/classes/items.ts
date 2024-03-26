@@ -7,10 +7,12 @@ type ExamType = 'exam1' | 'exam2';
 export class Items {
 
     classe: string = '';
-    items: any[] = [];
+    items: Item[] = [];
     settings: Settings = new Settings();
     lastTime!: Date;
     pauseNoon!: Pause;
+    schedule1: (Item | Pause)[] = [];
+    schedule2: (Item | Pause)[] = [];
 
     constructor(jsonData: any) {
         jsonData = jsonData.slice(1);
@@ -37,12 +39,24 @@ export class Items {
         this.updateSchedule();
     }
 
+    getSchedule(n: number = 1): any[] {
+        return n == 1 ? this.schedule1 as any[] : this.schedule2 as any[];
+    }
+
     removeItem(i: any) {
         this.items.splice(i, 1);
     }
 
-    sortBy(type: string = 'draw') {
-        this.items.sort((a, b) => a[type] - b[type]);
+    sortBy(property: keyof Item = 'draw') {
+        this.items.sort((a, b) => {
+            const valueA = a[property];
+            const valueB = b[property];
+            if (typeof valueA === 'number' && typeof valueB === 'number') {
+                return valueA - valueB;
+            } else {
+                return String(valueA).localeCompare(String(valueB));
+            }
+        });
     }
 
     randomDraw() {
@@ -68,129 +82,81 @@ export class Items {
         return array;
     }
 
-    process(): void {
-        this.addDrawDummies();
+    initialize(): void {
+        this.sortBy('draw');
+        const B12 = JSON.parse(JSON.stringify(this.items));
+        const midIndex = Math.ceil(B12.length / 2);
+        const A12 = B12.splice(0, midIndex);
+        const midIndexA = Math.ceil(A12.length / 2);
+        const A11 = A12.splice(0, midIndexA);
+        const midIndexB = Math.ceil(B12.length / 2);
+        const B11 = B12.splice(0, midIndexB);
+
+        this.schedule1 = [];
+        this.schedule1 = this.schedule1.concat(A11);
+        this.schedule1.push(new Pause({ title: 'Pause courte', subtype: 'short' }));
+        this.schedule1 = this.schedule1.concat(A12);
+        this.schedule1.push(new Pause({ title: 'Pause repas', subtype: 'noon' }));
+        this.schedule1 = this.schedule1.concat(B12);
+        this.schedule1.push(new Pause({ title: 'Pause courte', subtype: 'short' }));
+        this.schedule1 = this.schedule1.concat(B11);
+
+        const A21 = JSON.parse(JSON.stringify(A11));
+        const A22 = JSON.parse(JSON.stringify(A12));
+        const B21 = JSON.parse(JSON.stringify(B11));
+        const B22 = JSON.parse(JSON.stringify(B12));
+
+        this.schedule2 = [];
+        this.schedule2 = this.schedule2.concat(A22);
+        this.schedule2.push(new Pause({ title: 'Pause courte', subtype: 'short' }));
+        this.schedule2 = this.schedule2.concat(A21);
+        this.schedule2.push(new Pause({ title: 'Pause repas', subtype: 'noon' }));
+        this.schedule2 = this.schedule2.concat(B22);
+        this.schedule2.push(new Pause({ title: 'Pause courte', subtype: 'short' }));
+        this.schedule2 = this.schedule2.concat(B21);
+
         this.updateSchedule();
+
+        this.sortBy('n');
     }
 
     updateSchedule(): void {
-        this.calculateExamSchedules('exam1');
-        this.calculateExamSchedules('exam2');
-        this.sortBy('drawDummy1');
-    }
+        [this.schedule1, this.schedule2].forEach((schedule) => {
+            let time = new Date(this.settings.start);
+            schedule.forEach((item: (Item | Pause)) => {
+                if ('tpsup' in item && item.type == 'item') {
+                    let passage = new Date(time);
+                    if (item.tpsup && this.settings.tsupprep > 0) {
+                        passage.setMinutes(time.getMinutes() + this.settings.tprep + this.settings.tsupprep);
+                    } else {
+                        passage.setMinutes(time.getMinutes() + this.settings.tprep);
+                    }
 
-    getPauseNoon() {
-        const orderNoon = Math.ceil(this.items.length / 2) - 1;
-        return this.items[orderNoon];
-    }
+                    let exam = new Date(passage);
+                    if (item.tpsup && this.settings.tsupexam > 0) {
+                        exam.setMinutes(passage.getMinutes() + this.settings.texam + this.settings.tsupexam);
+                    } else {
+                        exam.setMinutes(passage.getMinutes() + this.settings.texam);
+                    }
 
-    addDrawDummies() {
-        this.removePauses();
-        this.sortBy('draw');
-        this.addPauses();
-        this.items.forEach((item, index) => {
-            item.drawDummy1 = index + 1;
-        });
+                    item.schedule = {
+                        'time1': new Date(time),
+                        'time2': new Date(passage),
+                        'time3': new Date(exam),
+                    };
 
-        let numbersArray = Array.from({ length: this.items.length }, (_, index) => index + 1);
-        const midIndex = Math.floor(numbersArray.length / 2);
-        const first = numbersArray.splice(midIndex + 1);
-        const last = numbersArray.splice(numbersArray.length - 1);
-        numbersArray = first.concat(last).concat(numbersArray);
-
-        this.items.forEach((item, index) => {
-            item.drawDummy2 = numbersArray[index];
-        });
-
-        this.sortBy('drawDummy1');
-        let count = 1;
-        this.items.forEach((item, index) => {
-            if (item.type == 'item') {
-                item.drawDisplay1 = count;
-                count++;
-            }
-        });
-
-        this.sortBy('drawDummy2');
-        count = 1;
-        this.items.forEach((item, index) => {
-            if (item.type == 'item') {
-                item.drawDisplay2 = count;
-                count++;
-            }
-        });
-    }
-
-    calculateExamSchedules(examType: ExamType, useLastTime: boolean = false): void {
-
-        if (examType == 'exam1') {
-            this.sortBy('drawDummy1');
-        }
-        if (examType == 'exam2') {
-            this.sortBy('drawDummy2');
-        }
-
-        let time = new Date(this.settings.start);
-        if (useLastTime !== false) {
-            time = new Date(this.lastTime);
-        }
-
-        this.items.forEach((item, index) => {
-            if (item.type == 'item') {
-                let passage = new Date(time);
-                if (item.tpsup && this.settings.tsupprep > 0) {
-                    passage.setMinutes(time.getMinutes() + this.settings.tprep + this.settings.tsupprep);
-                } else {
-                    passage.setMinutes(time.getMinutes() + this.settings.tprep);
+                    time = new Date(passage);
+                    this.lastTime = new Date(exam);
                 }
-
-                let exam = new Date(passage);
-                if (item.tpsup && this.settings.tsupexam > 0) {
-                    exam.setMinutes(passage.getMinutes() + this.settings.texam + this.settings.tsupexam);
-                } else {
-                    exam.setMinutes(passage.getMinutes() + this.settings.texam);
+                if ('subtype' in item && item.type == 'pause') {
+                    let duration = item.subtype == 'noon' ? this.settings.tpauseNoon : this.settings.tpauseShort;
+                    item.schedule.time1 = new Date(this.lastTime);
+                    item.schedule.time2 = new Date(item.schedule.time1);
+                    item.schedule.time2.setMinutes(item.schedule.time2.getMinutes() + duration);
+                    time = new Date(item.schedule.time2);
+                    this.lastTime = new Date(item.schedule.time2);
                 }
-
-                item[examType] = {
-                    'time1': new Date(time),
-                    'time2': new Date(passage),
-                    'time3': new Date(exam),
-                };
-
-                time = new Date(passage);
-                this.lastTime = new Date(exam);
-            }
-            if (item.type == 'pause') {
-                let duration = item.subtype == 'noon' ? this.settings.tpauseNoon : this.settings.tpauseShort;
-                item[examType].time1 = new Date(this.lastTime);
-                item[examType].time2 = new Date(item[examType].time1);
-                item[examType].time2.setMinutes(item[examType].time2.getMinutes() + duration);
-                time = new Date(item[examType].time2);
-                this.lastTime = new Date(item[examType].time2);
-            }
+            });
         });
-    }
-
-    removePauses() {
-        this.items.forEach((item, index) => {
-            if (item.type == 'pause') {
-                this.items.splice(index, 1);
-            }
-        });
-    }
-
-    addPauses(): void {
-
-        const length = this.items.length;
-
-        const orderAm = Math.ceil(length / 4);
-        this.items.splice(orderAm, 0, new Pause({ title: 'Pause courte', subtype: 'short' }));
-
-        const orderNoon = Math.ceil(length / 2) + 1;
-        this.items.splice(orderNoon, 0, new Pause({ title: 'Pause repas', subtype: 'noon' }));
-
-        const orderPm = Math.ceil(length / 4 * 3) + 2;
-        this.items.splice(orderPm, 0, new Pause({ title: 'Pause courte', subtype: 'short' }));
-
     }
 }

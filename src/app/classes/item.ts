@@ -22,8 +22,7 @@ export class Item {
     drawDummy2: number = 0;
     drawDisplay1: number = 0;
     drawDisplay2: number = 0;
-    exam1: ExamSchedule = { time1: new Date(), time2: new Date(), time3: new Date() };
-    exam2: ExamSchedule = { time1: new Date(), time2: new Date(), time3: new Date() };
+    schedule: ExamSchedule = { time1: new Date(), time2: new Date(), time3: new Date() };
     cssRowClass: string[] = ['item'];
 
     constructor(row: any, index: number) {
@@ -40,21 +39,21 @@ export class Item {
         this.n = index + 1;
     }
 
-    getTimeDifference(): string {
+    // getTimeDifference(): string {
 
-        let diffInMilliseconds = this.exam2.time1.getTime() - this.exam1.time3.getTime();
-        if( this.exam1.time3.getTime() > this.exam2.time1.getTime() ){
-            diffInMilliseconds = this.exam1.time1.getTime() - this.exam2.time3.getTime();
-        }
-        const diffInMinutes = Math.floor(diffInMilliseconds / (1000 * 60));
+    //     let diffInMilliseconds = this.exam2.time1.getTime() - this.exam1.time3.getTime();
+    //     if( this.exam1.time3.getTime() > this.exam2.time1.getTime() ){
+    //         diffInMilliseconds = this.exam1.time1.getTime() - this.exam2.time3.getTime();
+    //     }
+    //     const diffInMinutes = Math.floor(diffInMilliseconds / (1000 * 60));
 
-        const hours = Math.floor(diffInMinutes / 60);
-        const minutes = diffInMinutes % 60;
+    //     const hours = Math.floor(diffInMinutes / 60);
+    //     const minutes = diffInMinutes % 60;
 
-        if (hours >= 1) {
-            return `${hours}:${String(minutes).padStart(2, '0')}`;
-        } else {
-            return String(minutes);
-        }
-    }
+    //     if (hours >= 1) {
+    //         return `${hours}:${String(minutes).padStart(2, '0')}`;
+    //     } else {
+    //         return String(minutes);
+    //     }
+    // }
 }

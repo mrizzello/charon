@@ -1,6 +1,7 @@
 export interface PauseSchedule {
     time1: Date;
     time2: Date;
+    time3?: Date | null;
 }
 
 export class Pause {
@@ -10,9 +11,8 @@ export class Pause {
     drawDummy1: number;
     drawDummy2: number;
     cssRowClass: any[];
-    exam1: PauseSchedule;
-    exam2: PauseSchedule;
-
+    schedule: PauseSchedule = { time1: new Date(), time2: new Date() };
+    
     constructor(obj: any = {}) {
 
         const {
@@ -32,19 +32,15 @@ export class Pause {
         this.drawDummy1 = drawDummy1;
         this.drawDummy2 = drawDummy2;
         this.cssRowClass = cssRowClass;
-        this.exam1 = {
+        this.schedule = {
             time1: exam1?.time1 ?? new Date(),
             time2: exam1?.time2 ?? new Date()
         };
-        this.exam2 = {
-            time1: exam2?.time1 ?? new Date(),
-            time2: exam2?.time2 ?? new Date()
-        };
     }
 
-    getTimeDifference(): number{
-        const diffInMilliseconds = Math.abs(this.exam1.time2.getTime() - this.exam1.time1.getTime());
-        const diffInMinutes = Math.floor(diffInMilliseconds / (1000 * 60));
-        return diffInMinutes;
-    }
+    // getTimeDifference(): number{
+    //     const diffInMilliseconds = Math.abs(this.exam1.time2.getTime() - this.exam1.time1.getTime());
+    //     const diffInMinutes = Math.floor(diffInMilliseconds / (1000 * 60));
+    //     return diffInMinutes;
+    // }
 }

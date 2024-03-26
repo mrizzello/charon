@@ -59,13 +59,10 @@ export class AppComponent {
       this.disabledTab[n] = true;
     }
     this.disabledTab[i] = false;
-    if (i == 0) {
-      this.items?.removePauses();
-      this.items?.sortBy('n');
-    }
     if (i == 1) {
-      this.examFormComponent.process();
+      this.examFormComponent.getSchedules();
     }
+
   }
 
 }
