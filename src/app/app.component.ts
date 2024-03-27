@@ -99,9 +99,9 @@ export class AppComponent {
         }
         data.push(_item);
       });
-      const worksheet1 = XLSX.utils.aoa_to_sheet(data);
-      worksheet1['!merges'] = toMerge;
-      XLSX.utils.book_append_sheet(workbook, worksheet1, examName);
+      const worksheet = XLSX.utils.aoa_to_sheet(data);
+      worksheet['!merges'] = toMerge;
+      XLSX.utils.book_append_sheet(workbook, worksheet, examName);
     })
     XLSX.writeFile(workbook, 'data.xlsx');
   }
