@@ -60,6 +60,7 @@ export class AppComponent {
     }
     this.disabledTab[i] = false;
     if (i == 1) {
+      this.items?.initialize();
       this.examFormComponent.getSchedules();
     }
 

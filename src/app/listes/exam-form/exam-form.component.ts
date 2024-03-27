@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { Items } from '../../classes/items';
+import { Pause } from '../../classes/pause';
 import { Settings } from "../../classes/settings";
 
 @Component({

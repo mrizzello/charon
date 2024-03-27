@@ -10,7 +10,7 @@
     padding-right: 1rem;
     text-align: center;
 
-    h3{
+    h3 {
         font-weight: bold;
     }
 
@@ -19,7 +19,7 @@
         padding: 1rem;
         margin-bottom: 1rem;
 
-        .label{
+        .label {
             font-weight: bold;
             margin-bottom: 0.5rem;
         }
@@ -29,13 +29,14 @@
             flex-direction: row;
             align-items: center;
             padding: 0;
-            button{
+
+            button {
                 margin: 0 1rem;
             }
         }
     }
 
-    mat-form-field{
+    mat-form-field {
         width: 100%;
     }
 }
@@ -56,7 +57,8 @@
     th.header-exam {
         background-color: #eee;
     }
-    tr.header-bottom{
+
+    tr.header-bottom {
         border-bottom: 1px solid #666;
     }
 
@@ -112,8 +114,13 @@
             }
         }
 
-        &.pause-title {
+        &.time,
+        &.pause-time {
             text-align: center;
+        }
+
+        &.early {
+            color: red;
         }
     }
 }

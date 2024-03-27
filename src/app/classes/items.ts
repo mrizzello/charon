@@ -70,7 +70,6 @@ export class Items {
         this.items.forEach((item) => {
             let value = randomizedNumbers.shift();
             item.draw = value;
-            item.cssRowClass.push(value % 2 == 0 ? 'odd' : 'even');
         });
     }
 
@@ -85,38 +84,44 @@ export class Items {
     initialize(): void {
         this.sortBy('draw');
         const B12 = JSON.parse(JSON.stringify(this.items));
-        const midIndex = Math.ceil(B12.length / 2);
-        const A12 = B12.splice(0, midIndex);
-        const midIndexA = Math.ceil(A12.length / 2);
-        const A11 = A12.splice(0, midIndexA);
-        const midIndexB = Math.ceil(B12.length / 2);
-        const B11 = B12.splice(0, midIndexB);
+        const chunkSize = Math.ceil(B12.length / 4);
+        const chunks1: Item[][] = [];
+        for (let i = 0; i < B12.length; i += chunkSize) {
+            chunks1.push(B12.slice(i, i + chunkSize));
+        }
+        if (this.items.length % 4 !== 0) {
+            const tmpChunks = chunks1[2].concat(chunks1[3]);
+            const midIndexChunks = Math.ceil(tmpChunks.length / 2);
+            const tmpChunks2 = tmpChunks.splice(0, midIndexChunks);
+            chunks1[2] = tmpChunks;
+            chunks1[3] = tmpChunks2;
+            if (chunks1[2].length !== chunks1[3].length) {
+                const dummy = this.getDummy(this.items.length);
+                chunks1[2].push(dummy);
+            }
+        }
 
         this.schedule1 = [];
-        this.schedule1 = this.schedule1.concat(A11);
+        this.schedule1 = this.schedule1.concat(chunks1[0]);
         this.schedule1.push(new Pause({ title: 'Pause courte', subtype: 'short' }));
-        this.schedule1 = this.schedule1.concat(A12);
+        this.schedule1 = this.schedule1.concat(chunks1[1]);
         this.schedule1.push(new Pause({ title: 'Pause repas', subtype: 'noon' }));
-        this.schedule1 = this.schedule1.concat(B12);
+        this.schedule1 = this.schedule1.concat(chunks1[2]);
         this.schedule1.push(new Pause({ title: 'Pause courte', subtype: 'short' }));
-        this.schedule1 = this.schedule1.concat(B11);
+        this.schedule1 = this.schedule1.concat(chunks1[3]);
 
-        const A21 = JSON.parse(JSON.stringify(A11));
-        const A22 = JSON.parse(JSON.stringify(A12));
-        const B21 = JSON.parse(JSON.stringify(B11));
-        const B22 = JSON.parse(JSON.stringify(B12));
+        const chunks2 = JSON.parse(JSON.stringify(chunks1));
 
         this.schedule2 = [];
-        this.schedule2 = this.schedule2.concat(A22);
+        this.schedule2 = this.schedule2.concat(chunks2[1]);
         this.schedule2.push(new Pause({ title: 'Pause courte', subtype: 'short' }));
-        this.schedule2 = this.schedule2.concat(A21);
+        this.schedule2 = this.schedule2.concat(chunks2[0]);
         this.schedule2.push(new Pause({ title: 'Pause repas', subtype: 'noon' }));
-        this.schedule2 = this.schedule2.concat(B22);
+        this.schedule2 = this.schedule2.concat(chunks2[3]);
         this.schedule2.push(new Pause({ title: 'Pause courte', subtype: 'short' }));
-        this.schedule2 = this.schedule2.concat(B21);
+        this.schedule2 = this.schedule2.concat(chunks2[2]);
 
         this.updateSchedule();
-
         this.sortBy('n');
     }
 
@@ -126,6 +131,7 @@ export class Items {
             schedule.forEach((item: (Item | Pause)) => {
                 if ('tpsup' in item && item.type == 'item') {
                     let passage = new Date(time);
+
                     if (item.tpsup && this.settings.tsupprep > 0) {
                         passage.setMinutes(time.getMinutes() + this.settings.tprep + this.settings.tsupprep);
                     } else {
@@ -158,5 +164,43 @@ export class Items {
                 }
             });
         });
+        this.schedule1.forEach((item1: any) => {
+            if (item1.type == 'item') {
+                this.schedule2.forEach((item2: any) => {
+                    if (item1.n == item2.n && item2.type == 'item') {
+                        item1.early = false;
+                        item2.early = false;
+                        let diffMinutes = this.getMinutesDifference( item1.schedule.time1, item2.schedule.time3);
+                        if (item2.schedule.time1 > item1.schedule.time3) {
+                            diffMinutes = this.getMinutesDifference( item2.schedule.time1, item1.schedule.time3);
+                        }
+                        if( diffMinutes < 60 ){
+                            item1.early = true;
+                            item2.early = true;
+                        }
+                    }
+                });
+            }
+        })
+    }
+
+    getMinutesDifference(date1: Date, date2: Date): number {
+        const diffMilliseconds: number = Math.abs(date2.getTime() - date1.getTime());
+        const diffMinutes: number = Math.floor(diffMilliseconds / (1000 * 60));
+        return diffMinutes;
+    }
+
+    getDummy(n: number): Item {
+        const dummy = new Item([], n);
+        dummy.type = 'dummy';
+        dummy.gender = '';
+        dummy.lastname = '';
+        dummy.firstname = '';
+        dummy.emails = '';
+        dummy.bdate = '';
+        dummy.classes = '';
+        dummy.status = '';
+        dummy.tpsup = false;
+        return dummy;
     }
 }

@@ -18,12 +18,8 @@ export class Item {
     status: string = '';
     tpsup: boolean = false;
     draw: number = 0;
-    drawDummy1: number = 0;
-    drawDummy2: number = 0;
-    drawDisplay1: number = 0;
-    drawDisplay2: number = 0;
     schedule: ExamSchedule = { time1: new Date(), time2: new Date(), time3: new Date() };
-    cssRowClass: string[] = ['item'];
+    early: boolean = false;
 
     constructor(row: any, index: number) {
         this.type = 'item';
@@ -38,22 +34,4 @@ export class Item {
         this.status = row['__EMPTY_7'];
         this.n = index + 1;
     }
-
-    // getTimeDifference(): string {
-
-    //     let diffInMilliseconds = this.exam2.time1.getTime() - this.exam1.time3.getTime();
-    //     if( this.exam1.time3.getTime() > this.exam2.time1.getTime() ){
-    //         diffInMilliseconds = this.exam1.time1.getTime() - this.exam2.time3.getTime();
-    //     }
-    //     const diffInMinutes = Math.floor(diffInMilliseconds / (1000 * 60));
-
-    //     const hours = Math.floor(diffInMinutes / 60);
-    //     const minutes = diffInMinutes % 60;
-
-    //     if (hours >= 1) {
-    //         return `${hours}:${String(minutes).padStart(2, '0')}`;
-    //     } else {
-    //         return String(minutes);
-    //     }
-    // }
 }

@@ -61,7 +61,6 @@
             <thead>
                 <tr>
                     <th colspan="3" class="header-exam">{{exam1name}}</th>
-                    <th></th>
                     <th colspan="3" class="header-exam">{{exam2name}}</th>
                 </tr>
                 <tr class="header-bottom">
@@ -75,175 +74,62 @@
             </thead>
             <tbody>
                 <ng-container *ngFor="let item of schedule1; let i = index">
-                    <ng-container *ngIf="item.type == 'item'">
-                        <tr>
-                            <td>
+                    <ng-container *ngIf="item.type == 'item' || item.type == 'dummy'">
+                        <tr [ngClass]="item.draw % 2 == 0 ? 'even' : 'odd'" class="item">
+                            <td [ngClass]="{'early': item.early}">
                                 <u *ngIf="item.tpsup">{{item.firstname}} {{item.lastname}}</u>
                                 <span *ngIf="!item.tpsup">{{item.firstname}} {{item.lastname}}</span>
                             </td>
-                            <td>
-                                {{ item.schedule.time1 | date:'HH:mm' }} -
-                                {{ item.schedule.time2 | date:'HH:mm'}}
+                            <td class="time">
+                                <span *ngIf="item.type == 'item'">
+                                    {{ item.schedule.time1 | date:'HH:mm' }} -
+                                    {{ item.schedule.time2 | date:'HH:mm'}}
+                                </span>
                             </td>
-                            <td>
-                                {{ item.schedule.time2 | date:'HH:mm' }} -
-                                {{ item.schedule.time3 | date:'HH:mm'}}
+                            <td class="time border-right">
+                                <span *ngIf="item.type == 'item'">
+                                    {{ item.schedule.time2 | date:'HH:mm' }} -
+                                    {{ item.schedule.time3 | date:'HH:mm'}}
+                                </span>
                             </td>
-                            <td>
+                            <td [ngClass]="{'early': schedule2[i].early}">
                                 <u *ngIf="schedule2[i].tpsup">{{schedule2[i].firstname}} {{schedule2[i].lastname}}</u>
                                 <span *ngIf="!schedule2[i].tpsup">{{schedule2[i].firstname}}
                                     {{schedule2[i].lastname}}</span>
                             </td>
-                            <td>
-                                {{ schedule2[i].schedule.time1 | date:'HH:mm' }} -
-                                {{ schedule2[i].schedule.time2 | date:'HH:mm'}}
+                            <td class="time">
+                                <span *ngIf="schedule2[i].type == 'item'">
+                                    {{ schedule2[i].schedule.time1 | date:'HH:mm' }} -
+                                    {{ schedule2[i].schedule.time2 | date:'HH:mm'}}
+                                </span>
                             </td>
-                            <td>
-                                {{ schedule2[i].schedule.time2 | date:'HH:mm' }} -
-                                {{ schedule2[i].schedule.time3 | date:'HH:mm'}}
+                            <td class="time">
+                                <span *ngIf="schedule2[i].type == 'item'">
+                                    {{ schedule2[i].schedule.time2 | date:'HH:mm' }} -
+                                    {{ schedule2[i].schedule.time3 | date:'HH:mm'}}
+                                </span>
                             </td>
                         </tr>
                     </ng-container>
                     <ng-container *ngIf="item.type == 'pause'">
-                        <tr>
-                            <td colspan="3">
-                                {{ item.schedule.time1 | date:'HH:mm' }} -
-                                {{ item.schedule.time2 | date:'HH:mm' }}
+                        <tr class="pause">
+                            <td colspan="3" class="pause-time border-right">
+                                <span *ngIf="item.getTimeDifference() > 0; else elseBlock">
+                                    {{ item.schedule.time1 | date:'HH:mm' }} -
+                                    {{ item.schedule.time2 | date:'HH:mm' }}
+                                </span>
+                                <ng-template #elseBlock>-</ng-template>
                             </td>
-                            <td colspan="3">
-                                {{ schedule2[i].schedule.time1 | date:'HH:mm' }} -
-                                {{ schedule2[i].schedule.time2 | date:'HH:mm' }}
+                            <td colspan="3" class="pause-time">
+                                <span *ngIf="schedule2[i].getTimeDifference() > 0; else elseBlock">
+                                    {{ schedule2[i].schedule.time1 | date:'HH:mm' }} -
+                                    {{ schedule2[i].schedule.time2 | date:'HH:mm' }}
+                                </span>
                             </td>
                         </tr>
                     </ng-container>
                 </ng-container>
             </tbody>
-            <!--tbody>
-                <ng-container *ngFor="let item of items.items; let i = index">
-                    <ng-container *ngIf="item.type == 'item'">
-                        <tr [ngClass]="item.drawDisplay1 % 2 == 0 ? 'even' : 'odd'" class="item">
-                            <td>{{item.drawDisplay1}}</td>
-                            <td class="schedule">{{ item.exam1.time1 | date:'HH:mm' }} - {{ item.exam1.time2 |
-                                date:'HH:mm'
-                                }}
-                            </td>
-                            <td class="schedule border-right">{{ item.exam1.time2 | date:'HH:mm' }} - {{
-                                item.exam1.time3 |
-                                date:'HH:mm'}}</td>
-                            <td>
-                                <u *ngIf="item.tpsup">{{item.firstname}} {{item.lastname}}</u>
-                                <span *ngIf="!item.tpsup">{{item.firstname}} {{item.lastname}}</span>
-                            </td>
-                            <td class="time-difference">{{item.getTimeDifference()}}</td>
-                            <td class="schedule border-left">{{ item.exam2.time1 | date:'HH:mm' }} - {{ item.exam2.time2
-                                |
-                                date:'HH:mm' }}</td>
-                            <td class="schedule">{{ item.exam2.time2 | date:'HH:mm' }} - {{ item.exam2.time3 |
-                                date:'HH:mm'}}
-                            </td>
-                            <td>{{item.drawDisplay2}}</td>
-                        </tr>
-                    </ng-container>
-                    <ng-container *ngIf="item.type == 'pause' && item.getTimeDifference() > 0">
-                        <tr class="pause">
-                            <ng-container *ngIf="item.subtype == 'short'">
-                                <td colspan="3" class="schedule">{{item.exam1.time1 | date:'HH:mm'}} -
-                                    {{item.exam1.time2 | date:'HH:mm'}}</td>
-                                <td colspan="2" class="pause-title">&larr; {{item.title}} &rarr; </td>
-                                <td colspan="3" class="schedule">{{item.exam2.time1 | date:'HH:mm'}} -
-                                    {{item.exam2.time2 | date:'HH:mm'}}</td>
-                            </ng-container>
-                            <ng-container *ngIf="item.subtype == 'noon'">
-                                <td colspan="3" class="schedule">{{item.exam1.time1 | date:'HH:mm'}} -
-                                    {{item.exam1.time2 | date:'HH:mm'}}</td>
-                                <td colspan="2" class="pause-title border-right">&larr; {{item.title}}</td>
-                                <td colspan="3" class="schedule empty">&nbsp;</td>
-                            </ng-container>
-                        </tr>
-                    </ng-container>
-                </ng-container>
-                <tr *ngIf="pauseNoon && pauseNoon.getTimeDifference() > 0" class="pause">
-                    <td colspan="3" class="schedule empty">&nbsp;</td>
-                    <td colspan="2" class="pause-title border-left">{{pauseNoon.title}} &rarr;</td>
-                    <td colspan="3" class="schedule">{{pauseNoon.exam2.time1 | date:'HH:mm'}} -
-                        {{pauseNoon.exam2.time2 | date:'HH:mm'}}</td>
-                </tr>
-            </tbody-->
         </table>
-
-
-
-
-
-        <!--table class="table">
-            <thead>
-                <tr>
-                    <th colspan="3" class="header-exam">{{exam1name}}</th>
-                    <th colspan="2"></th>
-                    <th colspan="3" class="header-exam">{{exam2name}}</th>
-                </tr>
-                <tr class="header-bottom">
-                    <th>&nbsp;</th>
-                    <th>préparation</th>
-                    <th>passage</th>
-                    <th>Élève</th>
-                    <th>&#916;</th>
-                    <th>préparation</th>
-                    <th>passage</th>
-                    <th>&nbsp;</th>
-                </tr>
-            </thead>
-            <tbody>
-                <ng-container *ngFor="let item of items.items; let i = index">
-                    <ng-container *ngIf="item.type == 'item'">
-                        <tr [ngClass]="item.drawDisplay1 % 2 == 0 ? 'even' : 'odd'" class="item">
-                            <td>{{item.drawDisplay1}}</td>
-                            <td class="schedule">{{ item.exam1.time1 | date:'HH:mm' }} - {{ item.exam1.time2 |
-                                date:'HH:mm'
-                                }}
-                            </td>
-                            <td class="schedule border-right">{{ item.exam1.time2 | date:'HH:mm' }} - {{
-                                item.exam1.time3 |
-                                date:'HH:mm'}}</td>
-                            <td>
-                                <u *ngIf="item.tpsup">{{item.firstname}} {{item.lastname}}</u>
-                                <span *ngIf="!item.tpsup">{{item.firstname}} {{item.lastname}}</span>
-                            </td>
-                            <td class="time-difference">{{item.getTimeDifference()}}</td>
-                            <td class="schedule border-left">{{ item.exam2.time1 | date:'HH:mm' }} - {{ item.exam2.time2
-                                |
-                                date:'HH:mm' }}</td>
-                            <td class="schedule">{{ item.exam2.time2 | date:'HH:mm' }} - {{ item.exam2.time3 |
-                                date:'HH:mm'}}
-                            </td>
-                            <td>{{item.drawDisplay2}}</td>
-                        </tr>
-                    </ng-container>
-                    <ng-container *ngIf="item.type == 'pause' && item.getTimeDifference() > 0">
-                        <tr class="pause">
-                            <ng-container *ngIf="item.subtype == 'short'">
-                                <td colspan="3" class="schedule">{{item.exam1.time1 | date:'HH:mm'}} -
-                                    {{item.exam1.time2 | date:'HH:mm'}}</td>
-                                <td colspan="2" class="pause-title">&larr; {{item.title}} &rarr; </td>
-                                <td colspan="3" class="schedule">{{item.exam2.time1 | date:'HH:mm'}} -
-                                    {{item.exam2.time2 | date:'HH:mm'}}</td>
-                            </ng-container>
-                            <ng-container *ngIf="item.subtype == 'noon'">
-                                <td colspan="3" class="schedule">{{item.exam1.time1 | date:'HH:mm'}} -
-                                    {{item.exam1.time2 | date:'HH:mm'}}</td>
-                                <td colspan="2" class="pause-title border-right">&larr; {{item.title}}</td>
-                                <td colspan="3" class="schedule empty">&nbsp;</td>
-                            </ng-container>
-                        </tr>
-                    </ng-container>
-                </ng-container>
-                <tr *ngIf="pauseNoon && pauseNoon.getTimeDifference() > 0" class="pause">
-                    <td colspan="3" class="schedule empty">&nbsp;</td>
-                    <td colspan="2" class="pause-title border-left">{{pauseNoon.title}} &rarr;</td>
-                    <td colspan="3" class="schedule">{{pauseNoon.exam2.time1 | date:'HH:mm'}} -
-                        {{pauseNoon.exam2.time2 | date:'HH:mm'}}</td>
-                </tr>
-            </tbody>
-        </table-->
     </div>
 </div>

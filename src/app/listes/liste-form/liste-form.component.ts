@@ -18,7 +18,6 @@ export class ListeFormComponent {
 
   randomDraw() {
     this.items.randomDraw();
-    this.items.initialize();
   }
 
   updateTpsup(event: MatCheckboxChange, item: any): void {
