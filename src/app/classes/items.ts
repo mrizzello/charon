@@ -103,22 +103,22 @@ export class Items {
 
         this.schedule1 = [];
         this.schedule1 = this.schedule1.concat(chunks1[0]);
-        this.schedule1.push(new Pause({ title: 'Pause courte', subtype: 'short' }));
+        this.schedule1.push(new Pause({ title: 'Pause courte', subtype: 'am' }));
         this.schedule1 = this.schedule1.concat(chunks1[1]);
         this.schedule1.push(new Pause({ title: 'Pause repas', subtype: 'noon' }));
         this.schedule1 = this.schedule1.concat(chunks1[2]);
-        this.schedule1.push(new Pause({ title: 'Pause courte', subtype: 'short' }));
+        this.schedule1.push(new Pause({ title: 'Pause courte', subtype: 'pm' }));
         this.schedule1 = this.schedule1.concat(chunks1[3]);
 
         const chunks2 = JSON.parse(JSON.stringify(chunks1));
 
         this.schedule2 = [];
         this.schedule2 = this.schedule2.concat(chunks2[1]);
-        this.schedule2.push(new Pause({ title: 'Pause courte', subtype: 'short' }));
+        this.schedule2.push(new Pause({ title: 'Pause courte', subtype: 'am' }));
         this.schedule2 = this.schedule2.concat(chunks2[0]);
         this.schedule2.push(new Pause({ title: 'Pause repas', subtype: 'noon' }));
         this.schedule2 = this.schedule2.concat(chunks2[3]);
-        this.schedule2.push(new Pause({ title: 'Pause courte', subtype: 'short' }));
+        this.schedule2.push(new Pause({ title: 'Pause courte', subtype: 'pm' }));
         this.schedule2 = this.schedule2.concat(chunks2[2]);
 
         this.updateSchedule();
@@ -155,7 +155,18 @@ export class Items {
                     this.lastTime = new Date(exam);
                 }
                 if ('subtype' in item && item.type == 'pause') {
-                    let duration = item.subtype == 'noon' ? this.settings.tpauseNoon : this.settings.tpauseShort;
+                    let duration = 0;
+                    switch (item.subtype) {
+                        case 'am':
+                            duration = this.settings.tpauseAm;
+                            break;
+                        case 'pm':
+                            duration = this.settings.tpausePm;
+                            break;
+                        case 'noon':
+                            duration = this.settings.tpauseNoon;
+                            break;
+                    }
                     item.schedule.time1 = new Date(this.lastTime);
                     item.schedule.time2 = new Date(item.schedule.time1);
                     item.schedule.time2.setMinutes(item.schedule.time2.getMinutes() + duration);
@@ -170,11 +181,11 @@ export class Items {
                     if (item1.n == item2.n && item2.type == 'item') {
                         item1.early = false;
                         item2.early = false;
-                        let diffMinutes = this.getMinutesDifference( item1.schedule.time1, item2.schedule.time3);
+                        let diffMinutes = this.getMinutesDifference(item1.schedule.time1, item2.schedule.time3);
                         if (item2.schedule.time1 > item1.schedule.time3) {
-                            diffMinutes = this.getMinutesDifference( item2.schedule.time1, item1.schedule.time3);
+                            diffMinutes = this.getMinutesDifference(item2.schedule.time1, item1.schedule.time3);
                         }
-                        if( diffMinutes < 60 ){
+                        if (diffMinutes < 60) {
                             item1.early = true;
                             item2.early = true;
                         }

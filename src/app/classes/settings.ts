@@ -4,7 +4,8 @@ export class Settings {
     texam: number = 10;
     tsupprep: number = 5;
     tsupexam: number = 0;
-    tpauseShort: number = 10;
+    tpauseAm: number = 10;
+    tpausePm: number = 10;
     tpauseNoon: number = 60;
     exam1name: string = '';
     exam2name: string = '';
@@ -25,7 +26,8 @@ export class Settings {
             case 'texam':
             case 'tsupprep':
             case 'tsupexam':
-            case 'tpauseShort':
+            case 'tpauseAm':
+            case 'tpausePm':
             case 'tpauseNoon':
                 this[property] = value as number;
                 break;

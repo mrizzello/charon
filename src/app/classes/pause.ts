@@ -34,4 +34,14 @@ export class Pause {
         const diffInMinutes = Math.floor(diffInMilliseconds / (1000 * 60));
         return diffInMinutes;
     }
+
+    getLabel(): string{
+        if( this.subtype == 'am' ){
+            return 'Pause matin';
+        }
+        if( this.subtype == 'pm' ){
+            return 'Pause après-midi';
+        }
+        return 'Pause repas';
+    }
 }

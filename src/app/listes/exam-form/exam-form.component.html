@@ -42,17 +42,24 @@
             </div>
         </div>
         <div class="time-container">
-            <div class="label tpauseNoon">Minutes pause repas : {{items.getSetting('tpauseNoon')}} min.</div>
+            <div class="label tpauseAm">Min. pauses matin : {{items.getSetting('tpauseAm')}} min.</div>
+            <div class="button-row">
+                <button mat-flat-button color="primary" (click)="setMinutes('tpauseAm', -5)">-5</button>
+                <button mat-flat-button color="primary" (click)="setMinutes('tpauseAm', 5)">+5</button>
+            </div>
+        </div>
+        <div class="time-container">
+            <div class="label tpauseNoon">Min. pause repas : {{items.getSetting('tpauseNoon')}} min.</div>
             <div class="button-row">
                 <button mat-flat-button color="primary" (click)="setMinutes('tpauseNoon', -5)">-5</button>
                 <button mat-flat-button color="primary" (click)="setMinutes('tpauseNoon', 5)">+5</button>
             </div>
         </div>
         <div class="time-container">
-            <div class="label tpauseShort">Minutes pauses courtes : {{items.getSetting('tpauseShort')}} min.</div>
+            <div class="label tpausePm">Min. pauses après-midi : {{items.getSetting('tpausePm')}} min.</div>
             <div class="button-row">
-                <button mat-flat-button color="primary" (click)="setMinutes('tpauseShort', -5)">-5</button>
-                <button mat-flat-button color="primary" (click)="setMinutes('tpauseShort', 5)">+5</button>
+                <button mat-flat-button color="primary" (click)="setMinutes('tpausePm', -5)">-5</button>
+                <button mat-flat-button color="primary" (click)="setMinutes('tpausePm', 5)">+5</button>
             </div>
         </div>
     </div>
@@ -113,14 +120,16 @@
                     </ng-container>
                     <ng-container *ngIf="item.type == 'pause'">
                         <tr class="pause">
-                            <td colspan="3" class="pause-time border-right">
+                            <td>{{item.getLabel()}}</td>
+                            <td colspan="2" class="pause-time border-right">
                                 <span *ngIf="item.getTimeDifference() > 0; else elseBlock">
                                     {{ item.schedule.time1 | date:'HH:mm' }} -
                                     {{ item.schedule.time2 | date:'HH:mm' }}
                                 </span>
                                 <ng-template #elseBlock>-</ng-template>
                             </td>
-                            <td colspan="3" class="pause-time">
+                            <td>{{item.getLabel()}}</td>
+                            <td colspan="2" class="pause-time">
                                 <span *ngIf="schedule2[i].getTimeDifference() > 0; else elseBlock">
                                     {{ schedule2[i].schedule.time1 | date:'HH:mm' }} -
                                     {{ schedule2[i].schedule.time2 | date:'HH:mm' }}
