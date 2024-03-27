@@ -66,4 +66,8 @@ export class AppComponent {
 
   }
 
+  printPage(): void {
+    window.print();
+  }
+
 }

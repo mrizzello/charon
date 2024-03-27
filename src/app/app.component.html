@@ -1,14 +1,14 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" class="hide-from-print">
   <mat-icon>sailing</mat-icon>&nbsp;<span>CHARON</span>
   <span class="spacer"></span>
-  <button mat-icon-button>
+  <!--button mat-icon-button>
     <mat-icon>help</mat-icon>
-  </button>
+  </button-->
 </mat-toolbar>
 
 <div class="main">
 
-  <mat-card *ngIf="!uploadDone">
+  <mat-card *ngIf="!uploadDone" class="hide-from-print">
     <mat-card-header>
       <mat-card-title>Liste de classe Hermes</mat-card-title>
     </mat-card-header>
@@ -25,7 +25,7 @@
     </mat-card-content>
   </mat-card>
   
-  <div class="refresh-container" *ngIf="uploadDone">
+  <div class="refresh-container hide-from-print" *ngIf="uploadDone">
       <button mat-raised-button (click)="reloadApp()">
         <mat-icon>refresh</mat-icon> Recommencer
       </button>
@@ -42,15 +42,10 @@
       </mat-tab>
       <mat-tab label="Ordre de passage" [disabled]="disabledTab[1]">
         <app-exam-form [items]="items"></app-exam-form>
-        <div class="button-row">
+        <div class="button-row hide-from-print">
           <button mat-raised-button color="primary" (click)="activateTab(0)">Précédent</button>
           <div class="button-row-spacer"></div>
-          <button mat-raised-button color="primary" (click)="activateTab(2)">Suivant</button>
-        </div>
-      </mat-tab>
-      <mat-tab label="Exports" [disabled]="disabledTab[2]">
-        <div class="button-row">
-          <button mat-raised-button color="primary" (click)="activateTab(1)">Précédent</button>
+          <button mat-raised-button color="accent" (click)="printPage()">Imprimer</button>
         </div>
       </mat-tab>
     </mat-tab-group>
