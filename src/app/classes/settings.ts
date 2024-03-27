@@ -7,8 +7,8 @@ export class Settings {
     tpauseAm: number = 10;
     tpausePm: number = 10;
     tpauseNoon: number = 60;
-    exam1name: string = '';
-    exam2name: string = '';
+    exam1name: string = 'Examen 1';
+    exam2name: string = 'Examen 2';
 
     constructor(start: string = '08:20') {
         const [hours, minutes] = start.split(":");
