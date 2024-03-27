@@ -23,7 +23,7 @@ jobs:
         run: npm install
 
       - name: Build
-        run: ng build --output-path docs
+        run: ng build --output-path docs --base-href /charon/
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
