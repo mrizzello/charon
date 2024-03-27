@@ -24,7 +24,7 @@ export class AppComponent {
 
   @ViewChild(ExamFormComponent) examFormComponent!: ExamFormComponent;
 
-  constructor(private datePipe: DatePipe) {}
+  constructor(private datePipe: DatePipe) { }
 
   handleFileInput(event: any) {
 
@@ -78,26 +78,28 @@ export class AppComponent {
   export2Excel(): void {
     const settings = this.items?.getSettings();
     const workbook = XLSX.utils.book_new();
-    [this.items?.schedule1,this.items?.schedule2].forEach((schedule:any, sIndex: number)=>{
+    [this.items?.schedule1, this.items?.schedule2].forEach((schedule: any, sIndex: number) => {
       const data: any[] = [];
       const toMerge: any[] = [];
       const examName = sIndex == 0 ? settings?.exam1name : settings?.exam2name;
       data.push([examName]);
-      data.push(['Élève','préparation','passage']);
+      data.push(['Élève', 'préparation', 'passage']);
       toMerge.push({ s: { r: 0, c: 0 }, e: { r: 0, c: 2 } });
       schedule.forEach((item: Item | Pause, index: number) => {
-        const _item: any = [];
-        if (item.type == 'item') {
-          _item.push((item as Item).firstname);
-          _item.push( this.formatTime((item as Item).schedule.time1) + ' - ' + this.formatTime((item as Item).schedule.time2) );
-          _item.push( this.formatTime((item as Item).schedule.time2) + ' - ' + this.formatTime((item as Item).schedule.time3) );
+        if (item.type != 'dummy') {
+          const _item: any = [];
+          if (item.type == 'item') {
+            _item.push((item as Item).firstname + (item as Item).tpsup ? '*' : '');
+            _item.push(this.formatTime((item as Item).schedule.time1) + ' - ' + this.formatTime((item as Item).schedule.time2));
+            _item.push(this.formatTime((item as Item).schedule.time2) + ' - ' + this.formatTime((item as Item).schedule.time3));
+          }
+          if (item.type == 'pause') {
+            _item.push((item as Pause).getLabel());
+            _item.push(this.formatTime((item as Pause).schedule.time1) + ' - ' + this.formatTime((item as Pause).schedule.time2));
+            toMerge.push({ s: { r: index + 2, c: 1 }, e: { r: index + 2, c: 2 } });
+          }
+          data.push(_item);
         }
-        if (item.type == 'pause') {
-          _item.push((item as Pause).getLabel());
-          _item.push( this.formatTime((item as Pause).schedule.time1) + ' - ' + this.formatTime((item as Pause).schedule.time2) );
-          toMerge.push({ s: { r: index+2, c: 1 }, e: { r: index+2, c: 2 } });
-        }
-        data.push(_item);
       });
       const worksheet = XLSX.utils.aoa_to_sheet(data);
       worksheet['!merges'] = toMerge;
