@@ -33,7 +33,7 @@
 
   <mat-card *ngIf="items" class="card-tab-group">
     <h1 class="classe">{{items.getClasse()}}</h1>
-    <mat-tab-group #tabGroup [selectedIndex]="selectedTab" (selectedIndexChange)="selectedTab = $event" dynamicHeight>
+    <mat-tab-group #tabGroup [selectedIndex]="selectedTab" (selectedIndexChange)="selectedTab = $event" dynamicHeight class="mat-tab-group">
       <mat-tab label="Classe" [disabled]="disabledTab[0]">
         <app-liste-form [items]="items"></app-liste-form>
         <div class="button-row">

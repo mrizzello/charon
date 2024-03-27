@@ -119,6 +119,10 @@
             text-align: center;
         }
 
+        &.pause-label {
+            text-align: right;
+        }
+
         &.early {
             color: red;
         }
@@ -127,6 +131,6 @@
 
 @media print {
     .hide-from-print {
-      display: none !important;
+        display: none !important;
     }
-  }
+}

@@ -120,7 +120,7 @@
                     </ng-container>
                     <ng-container *ngIf="item.type == 'pause'">
                         <tr class="pause">
-                            <td>{{item.getLabel()}}</td>
+                            <td class="pause-label">{{item.getLabel()}}</td>
                             <td colspan="2" class="pause-time border-right">
                                 <span *ngIf="item.getTimeDifference() > 0; else elseBlock">
                                     {{ item.schedule.time1 | date:'HH:mm' }} -
@@ -128,7 +128,7 @@
                                 </span>
                                 <ng-template #elseBlock>-</ng-template>
                             </td>
-                            <td>{{item.getLabel()}}</td>
+                            <td class="pause-label">{{item.getLabel()}}</td>
                             <td colspan="2" class="pause-time">
                                 <span *ngIf="schedule2[i].getTimeDifference() > 0; else elseBlock">
                                     {{ schedule2[i].schedule.time1 | date:'HH:mm' }} -

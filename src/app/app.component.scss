@@ -8,12 +8,12 @@
     height: 100%;
 }
 
-.refresh-container{
+.refresh-container {
     padding: 1rem 0;
 }
 
 .main {
-    width: 95%; 
+    width: 95%;
     margin: 0 auto;
     padding: 1rem;
 }
@@ -56,6 +56,6 @@
 
 @media print {
     .hide-from-print {
-      display: none !important;
+        display: none !important;
     }
-  }
+}
