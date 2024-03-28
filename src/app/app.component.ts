@@ -1,11 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
 import * as XLSX from 'xlsx';
 
 import { Items } from './classes/items';
 import { Item } from './classes/item';
 import { Pause } from './classes/pause';
 import { ExamFormComponent } from './listes/exam-form/exam-form.component';
+import { InfoComponent } from './pages/info/info.component';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +26,10 @@ export class AppComponent {
 
   @ViewChild(ExamFormComponent) examFormComponent!: ExamFormComponent;
 
-  constructor(private datePipe: DatePipe) { }
+  constructor(
+    private datePipe: DatePipe,
+    private dialog: MatDialog
+  ) { }
 
   handleFileInput(event: any) {
 
@@ -117,6 +122,12 @@ export class AppComponent {
 
   formatTime(date: Date): string {
     return this.datePipe.transform(date, 'HH:mm') || '';
+  }
+
+  openInfoDialog(): void {
+    const dialogRef = this.dialog.open(InfoComponent, {
+      width: '640px',
+    });
   }
 
 }

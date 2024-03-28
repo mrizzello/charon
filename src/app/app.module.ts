@@ -11,12 +11,14 @@ import { FormsModule } from '@angular/forms';
 
 import { ListeFormComponent } from './listes/liste-form/liste-form.component';
 import { ExamFormComponent } from './listes/exam-form/exam-form.component';
+import { InfoComponent } from './pages/info/info.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ListeFormComponent,
-    ExamFormComponent
+    ExamFormComponent,
+    InfoComponent
   ],
   imports: [
     BrowserModule,
