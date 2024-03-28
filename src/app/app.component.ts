@@ -85,20 +85,27 @@ export class AppComponent {
       data.push([examName]);
       data.push(['Élève', 'préparation', 'passage']);
       toMerge.push({ s: { r: 0, c: 0 }, e: { r: 0, c: 2 } });
+      let rowCounter = 2;
       schedule.forEach((item: Item | Pause, index: number) => {
         if (item.type != 'dummy') {
           const _item: any = [];
           if (item.type == 'item') {
-            _item.push((item as Item).firstname + (item as Item).tpsup ? '*' : '');
+            _item.push((item as Item).firstname + ' ' + (item as Item).lastname + ((item as Item).tpsup ? '*' : ''));
             _item.push(this.formatTime((item as Item).schedule.time1) + ' - ' + this.formatTime((item as Item).schedule.time2));
             _item.push(this.formatTime((item as Item).schedule.time2) + ' - ' + this.formatTime((item as Item).schedule.time3));
+            data.push(_item);
+            rowCounter++;
           }
           if (item.type == 'pause') {
-            _item.push((item as Pause).getLabel());
-            _item.push(this.formatTime((item as Pause).schedule.time1) + ' - ' + this.formatTime((item as Pause).schedule.time2));
-            toMerge.push({ s: { r: index + 2, c: 1 }, e: { r: index + 2, c: 2 } });
+            const pauseItem = item as Pause;
+            if (pauseItem.getTimeDifference() > 0) {
+              _item.push((item as Pause).getLabel());
+              _item.push(this.formatTime((item as Pause).schedule.time1) + ' - ' + this.formatTime((item as Pause).schedule.time2));
+              toMerge.push({ s: { r: rowCounter, c: 1 }, e: { r: rowCounter, c: 2 } });
+              data.push(_item);
+              rowCounter++;
+            }
           }
-          data.push(_item);
         }
       });
       const worksheet = XLSX.utils.aoa_to_sheet(data);
