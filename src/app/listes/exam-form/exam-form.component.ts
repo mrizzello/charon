@@ -1,7 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { Items } from '../../classes/items';
-import { Pause } from '../../classes/pause';
 import { Settings } from "../../classes/settings";
 
 @Component({
@@ -9,7 +8,7 @@ import { Settings } from "../../classes/settings";
   templateUrl: './exam-form.component.html',
   styleUrls: ['./exam-form.component.scss']
 })
-export class ExamFormComponent {
+export class ExamFormComponent implements OnInit {
 
   exam1name: string = 'Examen 1';
   exam2name: string = 'Examen 2';
@@ -18,7 +17,7 @@ export class ExamFormComponent {
 
   @Input() items!: Items;
 
-  getSchedules(): void {
+  ngOnInit(): void {
     this.schedule1 = this.items.getSchedule(1);
     this.schedule2 = this.items.getSchedule(2);
   }

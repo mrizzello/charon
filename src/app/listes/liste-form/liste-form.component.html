@@ -1,15 +1,15 @@
-<div>
+<div class="header">
     <ul class="hints">
         <li><mat-icon fontSet="material-icons-outlined">timer</mat-icon> Indiquer les élèves aux bénéfice de temps
             supplémentaire.</li>
         <li><mat-icon>tag</mat-icon> Si un tirage a déjà été effectué, remplir l'ordre de passage.</li>
         <li><mat-icon>shuffle</mat-icon> Possibilité d'effectuer un tirage aléatoire.</li>
     </ul>
-</div>
-<div class="button-row">
-    <button mat-raised-button color="accent" (click)="randomDraw()">
-        <mat-icon>shuffle</mat-icon>Tirage aléatoire
-    </button>
+    <div class="shuffle">
+        <button mat-raised-button color="primary" (click)="randomDraw()">
+            <mat-icon>shuffle</mat-icon>Tirage aléatoire
+        </button>
+    </div>
 </div>
 <mat-list role="list" class="list">
     <ng-container *ngFor="let item of items.items">

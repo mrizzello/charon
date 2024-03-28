@@ -1,6 +1,10 @@
 <mat-toolbar color="primary" class="hide-from-print">
   <mat-icon>sailing</mat-icon>&nbsp;<span>CHARON</span>
   <span class="spacer"></span>
+  <button mat-flat-button color="accent" (click)="reloadApp()" *ngIf="uploadDone">
+    <mat-icon>refresh</mat-icon> Recommencer
+  </button>
+  <span class="spacer"></span>
   <button mat-icon-button (click)="openInfoDialog()">
     <mat-icon>help</mat-icon>
   </button>
@@ -8,32 +12,47 @@
 
 <div class="main">
 
-  <mat-card *ngIf="!uploadDone" class="hide-from-print">
-    <mat-card-header>
-      <mat-card-title>Liste de classe Hermes</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <p>
-        <input type="file" (change)="handleFileInput($event)" #input>
-      </p>
-      <p>
-        Accueil > Listes, sélectionner la classe puis exporter au format Excel
-      </p>
-      <p *ngIf="errorMessage != ''" style="color:red;">
-        {{errorMessage}}
-      </p>
-    </mat-card-content>
-  </mat-card>
-  
-  <div class="refresh-container hide-from-print" *ngIf="uploadDone">
-      <button mat-raised-button (click)="reloadApp()">
-        <mat-icon>refresh</mat-icon> Recommencer
-      </button>
-    </div>
+  <div *ngIf="!uploadDone" class="upload-form hide-from-print">
+    <h3>Liste de classe Hermes</h3>
+    <p>
+      <input type="file" (change)="handleFileInput($event)" #input>
+    </p>
+    <p *ngIf="errorMessage != ''" class="hint error">
+      {{errorMessage}}
+    </p>
+    <p class="hint">
+      Accueil > Listes, sélectionner la classe puis exporter au format Excel
+    </p>
+  </div>
 
-  <mat-card *ngIf="items" class="card-tab-group">
+  <div *ngIf="items" class="item-container">
     <h1 class="classe">{{items.getClasse()}}</h1>
-    <mat-tab-group #tabGroup [selectedIndex]="selectedTab" (selectedIndexChange)="selectedTab = $event" dynamicHeight class="mat-tab-group">
+    <div *ngIf="!disabledTab[0]">
+      <app-liste-form [items]="items"></app-liste-form>
+      <div class="button-row">
+        <div class="button-row-spacer"></div>
+        <button mat-raised-button color="primary" (click)="activateTab(1)">Suivant</button>
+        <div class="button-row-spacer"></div>
+      </div>
+    </div>
+    <div *ngIf="!disabledTab[1]">
+      <app-exam-form [items]="items"></app-exam-form>
+      <div class="button-row hide-from-print">
+        <div class="button-row-spacer"></div>
+        <button mat-raised-button color="primary" (click)="activateTab(0)">Précédent</button>
+        <div class="button-row-spacer"></div>
+        <button mat-raised-button color="accent" (click)="printPage()">Imprimer</button>
+        <div class="button-row-spacer"></div>
+        <button mat-raised-button color="accent" (click)="export2Excel()">Export xlsx</button>
+        <div class="button-row-spacer"></div>
+      </div>
+    </div>
+  </div>
+
+  <!--mat-card *ngIf="items" class="card-tab-group">
+    <h1 class="classe">{{items.getClasse()}}</h1>
+    <mat-tab-group #tabGroup [selectedIndex]="selectedTab" (selectedIndexChange)="selectedTab = $event" dynamicHeight
+      class="mat-tab-group">
       <mat-tab label="Classe" [disabled]="disabledTab[0]">
         <app-liste-form [items]="items"></app-liste-form>
         <div class="button-row">
@@ -52,5 +71,5 @@
       </mat-tab>
     </mat-tab-group>
 
-  </mat-card>
+  </mat-card-->
 </div>

@@ -6,7 +6,6 @@
 
 .settings {
     width: 15rem;
-    margin-top: 4rem;
     padding-right: 1rem;
     text-align: center;
 
@@ -43,11 +42,11 @@
 
 .schedule {
     flex-grow: 1;
+    max-width: 50rem;
 }
 
 .table {
     width: 100%;
-    margin: 2rem auto 0;
     border-collapse: collapse;
 
     th {

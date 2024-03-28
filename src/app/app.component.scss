@@ -8,25 +8,28 @@
     height: 100%;
 }
 
-.refresh-container {
-    padding: 1rem 0;
-}
-
 .main {
     width: 95%;
     margin: 0 auto;
     padding: 1rem;
+
+    .upload-form {
+        text-align: center;
+    }
 }
 
-.card-tab-group {
-    padding: 1rem;
-    margin-bottom: 12rem;
+.hint {
+    font-size: 85%;
+    font-style: italic;
+
+    &.error {
+        color: red;
+    }
 }
 
 .classe {
     font-weight: bold;
     text-align: center;
-    padding: 0.33rem 0;
 }
 
 .item-list {
