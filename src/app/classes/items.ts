@@ -47,15 +47,12 @@ export class Items {
         this.items = this.items.filter(obj => obj.n !== n);
     }
 
-    sortBy(property: keyof Item = 'draw') {
-        this.items.sort((a, b) => {
-            const valueA = a[property];
-            const valueB = b[property];
-            if (typeof valueA === 'number' && typeof valueB === 'number') {
-                return valueA - valueB;
-            } else {
-                return String(valueA).localeCompare(String(valueB));
+    sortBy(property: keyof Item = 'draw') {        
+        this.items.sort((a, b) => {            
+            if(property == 'n'){
+                return a.n - b.n;
             }
+            return a.draw - b.draw;
         });
     }
 
