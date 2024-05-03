@@ -43,8 +43,8 @@ export class Items {
         return n == 1 ? this.schedule1 as any[] : this.schedule2 as any[];
     }
 
-    removeItem(i: any) {
-        this.items.splice(i, 1);
+    removeItem(n: any) {
+        this.items = this.items.filter(obj => obj.n !== n);
     }
 
     sortBy(property: keyof Item = 'draw') {
