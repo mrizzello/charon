@@ -24,8 +24,8 @@ export class ListeFormComponent {
     item.tpsup = event.checked;
   }
 
-  updateDraw(newValue: any, item: any): void {
-    item.draw = newValue;
+  updateDraw(event: any, item: any): void {
+    item.draw = event.target.value;
   }
 
 }
