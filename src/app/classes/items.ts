@@ -2,6 +2,8 @@ import { Item } from "./item";
 import { Pause } from "./pause";
 import { Settings } from "./settings";
 
+import { Title } from '@angular/platform-browser';
+
 type ExamType = 'exam1' | 'exam2';
 
 export class Items {
@@ -14,12 +16,17 @@ export class Items {
     schedule1: (Item | Pause)[] = [];
     schedule2: (Item | Pause)[] = [];
 
-    constructor(jsonData: any) {
+    constructor(jsonData: any, private titleService: Title) {
         jsonData = jsonData.slice(1);
-        this.classe = jsonData[0]['__EMPTY_3'];
+        this.setClasse(jsonData[0]['__EMPTY_3']);
         this.items = jsonData.map((row: any, index: number) => {
             return new Item(row, index);
         });
+    }
+
+    setClasse(idClasse:string): void {
+        this.classe = idClasse;
+        this.titleService.setTitle(idClasse + " - Liste de passage");
     }
 
     getClasse(): string {
@@ -47,9 +54,9 @@ export class Items {
         this.items = this.items.filter(obj => obj.n !== n);
     }
 
-    sortBy(property: keyof Item = 'draw') {        
-        this.items.sort((a, b) => {            
-            if(property == 'n'){
+    sortBy(property: keyof Item = 'draw') {
+        this.items.sort((a, b) => {
+            if (property == 'n') {
                 return a.n - b.n;
             }
             return a.draw - b.draw;

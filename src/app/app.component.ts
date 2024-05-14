@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
+import { Title } from '@angular/platform-browser';
 import * as XLSX from 'xlsx';
 
 import { Items } from './classes/items';
@@ -28,7 +29,8 @@ export class AppComponent {
 
   constructor(
     private datePipe: DatePipe,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private titleService: Title
   ) { }
 
   handleFileInput(event: any) {
@@ -47,7 +49,7 @@ export class AppComponent {
           const sheetName = workbook.SheetNames[0];
           const worksheet = workbook.Sheets[sheetName];
           let jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 2, range: 3 }) as any[];
-          this.items = new Items(jsonData);
+          this.items = new Items(jsonData, this.titleService);
         };
 
         reader.readAsArrayBuffer(file);
@@ -115,7 +117,8 @@ export class AppComponent {
       worksheet['!merges'] = toMerge;
       XLSX.utils.book_append_sheet(workbook, worksheet, examName);
     })
-    XLSX.writeFile(workbook, 'data.xlsx');
+    
+    XLSX.writeFile(workbook, this.items?.getClasse() + '-liste-passage-exa-oraux.xlsx');
   }
 
   formatTime(date: Date): string {
